@@ -17,9 +17,8 @@ shouldntParse str = parseRpn str `shouldSatisfy` isLeft where
 spec :: Spec
 spec = do
     describe "successes" $ do
-        it "should parse lone literals" $ do
+        it "should parse lone positive literals" $ do
             "2" `shouldParseAs` IntLit 2
-            "4.89" `shouldParseAs` DoubleLit 4.89
         it "should parse simple integer expressions" $ do
             "2 2 +" `shouldParseAs` (IntLit 2 :+ IntLit 2)
             "10 20 *" `shouldParseAs` (IntLit 10 :* IntLit 20)
