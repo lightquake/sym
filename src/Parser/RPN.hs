@@ -1,3 +1,9 @@
-module Parser.RPN where
+module Parser.RPN (
+    parseRpn
+    ) where
 
-x = 1
+import Parser.AST
+import Text.Parsec
+
+parseRpn :: String -> Either ParseError AST
+parseRpn = undefined
