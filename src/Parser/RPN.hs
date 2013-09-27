@@ -54,6 +54,7 @@ binary f = do
 rpn :: RPNParser AST
 rpn = do
     many1 . lexeme $ nonSubOp <|> try doubleLiteral <|> try intLiteral <|> subOp
+    eof
     stack <- getState
     case stack of
         [x] -> return x

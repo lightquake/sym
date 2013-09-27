@@ -47,3 +47,4 @@ spec = do
             mapM_ shouldntParse ["2 -",
                                  "99 99 - *",
                                  "^"]
+        it "should fail on unknown input" $ shouldntParse "2 3 + potato *"
