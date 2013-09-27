@@ -14,9 +14,7 @@ evaluatePrint = do
     lift $ putStr "> " >> hFlush stdout
     str <- await
     lift $ case evaluate <$> parseRpn str of
-            Left err -> do
-                putStr "Error: "
-                mapM_ (putStrLn . messageString) $ errorMessages err
+            Left err -> print err
             Right (IntLit i) -> print i
             Right (DoubleLit d) -> print d
             Right ast -> print ast
