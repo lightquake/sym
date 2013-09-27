@@ -30,6 +30,7 @@ spec = do
         it "should parse simple floating point expressions" $ do
             "1.5 3 /" `shouldParseAs` (DoubleLit 1.5 :/ IntLit 3)
             "2.2 3.3 ^" `shouldParseAs` (DoubleLit 2.2 :^ DoubleLit 3.3)
+            "2.98" `shouldParseAs` DoubleLit 2.98
         it "should allow more than 2 numbers on the stack" $
             "1 2 3 4 + * -" `shouldParseAs`
                 (IntLit 1 :- (IntLit 2 :* (IntLit 3 :+ IntLit 4)))

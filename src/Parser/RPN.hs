@@ -22,6 +22,15 @@ intLiteral = do
     int <- sign <*> (read <$> many1 digit)
     updateState (IntLit int:)
 
+doubleLiteral :: RPNParser ()
+doubleLiteral = do
+    s <- sign
+    intPart <- many1 digit
+    char '.'
+    fracPart <- many1 digit
+    let double = s . read $ intPart ++ "." ++ fracPart
+    updateState (DoubleLit double:)
+
 nonSubOp :: RPNParser ()
 nonSubOp = foldr1 (<|>) $ map (\(op, ctor) -> string op >> binary ctor)
        [("+", (:+)),
@@ -41,7 +50,7 @@ binary f = do
 
 rpn :: RPNParser AST
 rpn = do
-    many1 . lexeme $ nonSubOp <|> try intLiteral <|> subOp
+    many1 . lexeme $ nonSubOp <|> try doubleLiteral <|> try intLiteral <|> subOp
     stack <- getState
     case stack of
         [x] -> return x
