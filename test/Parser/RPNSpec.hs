@@ -7,7 +7,8 @@ import           Test.Hspec
 
 shouldParseAs :: String -> AST -> Expectation
 shouldParseAs str ast = case parseRpn str of
-    Left err -> expectationFailure $ show err
+    Left err -> expectationFailure $
+                "parsing " ++ str ++ ": \n" ++ show err
     Right ast' -> ast' `shouldBe` ast
 
 shouldntParse str = parseRpn str `shouldSatisfy` isLeft where
