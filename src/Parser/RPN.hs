@@ -19,7 +19,7 @@ sign = (char '+' >> return id) <|> (char '-' >> return negate) <|> return id
 
 intLiteral :: RPNParser ()
 intLiteral = do
-    int <- lexeme $ sign <*> (read <$> many1 digit)
+    int <- sign <*> (read <$> many1 digit)
     updateState (IntLit int:)
 
 nonSubOp :: RPNParser ()
@@ -41,7 +41,7 @@ binary f = do
 
 rpn :: RPNParser AST
 rpn = do
-    many1 (nonSubOp <|> try intLiteral <|> subOp)
+    many1 . lexeme $ nonSubOp <|> try intLiteral <|> subOp
     stack <- getState
     case stack of
         [x] -> return x
