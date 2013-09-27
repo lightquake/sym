@@ -15,7 +15,7 @@ lexeme p = do
     return x
 
 sign :: Num a => RPNParser (a -> a)
-sign = (char '+' >> return id) <|> (char '-' >> return negate) <|> return id
+sign = (char '-' >> return negate) <|> return id
 
 intLiteral :: RPNParser ()
 intLiteral = do
@@ -31,15 +31,18 @@ doubleLiteral = do
     let double = s . read $ intPart ++ "." ++ fracPart
     updateState (DoubleLit double:)
 
+-- We need to split out subtraction into its own parser so that we can
+-- properly parse '-234' as IntLit (-234) and not as subtraction followed by
+-- IntLit 234.
+subOp :: RPNParser ()
+subOp = string "-" >> binary (:-)
+
 nonSubOp :: RPNParser ()
 nonSubOp = foldr1 (<|>) $ map (\(op, ctor) -> string op >> binary ctor)
        [("+", (:+)),
         ("*", (:*)),
         ("/", (:/)),
         ("^", (:^))]
-
-subOp :: RPNParser ()
-subOp = string "-" >> binary (:-)
 
 binary :: (AST -> AST -> AST) -> RPNParser ()
 binary f = do
