@@ -11,7 +11,7 @@ shouldParseAs str ast = case parseRpn str of
                 "parsing " ++ str ++ ": \n" ++ show err
     Right ast' -> ast' `shouldBe` ast
 
-shouldntParse str = parseRpn str `shouldSatisfy` isLeft where
+shouldntParse str = str `shouldSatisfy` isLeft . parseRpn where
   isLeft (Left _) = True
   isLeft _ = False
 
